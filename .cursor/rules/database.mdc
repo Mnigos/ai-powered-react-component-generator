@@ -1,0 +1,18 @@
+---
+description: 
+globs: *.ts,*.tsx,*.prisma
+alwaysApply: false
+---
+# AI Rules for Component Generator AI
+
+React component AI generator. User input a prompt and ai generates a react component based on the user's prompt. Something like v0.
+
+## DATABASE
+
+### Guidelines for SQL
+
+#### POSTGRES
+
+- Use connection pooling to manage database connections efficiently
+- Implement JSONB columns for semi-structured data instead of creating many tables for {{flexible_data}}
+- Use materialized views for complex, frequently accessed read-only data
