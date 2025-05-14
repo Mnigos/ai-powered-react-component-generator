@@ -1,32 +1,32 @@
-import { ComponentPreview } from "@/components/component-preview";
-import { Button } from "@/components/ui/button";
+import { ComponentPreview } from '@/components/component-preview'
+import { Button } from '@/components/ui/button'
 import {
 	Card,
 	CardContent,
 	CardDescription,
 	CardHeader,
 	CardTitle,
-} from "@/components/ui/card";
-import { getLatestComponents } from "@/data/components";
-import Link from "next/link";
+} from '@/components/ui/card'
+import { getLatestComponents } from '@/data/components'
+import Link from 'next/link'
 
 export async function GeneratedComponents() {
-	const components = await getLatestComponents();
+	const components = await getLatestComponents()
 
 	return (
-		<div className="grid text-center lg:mb-0 lg:w-full lg:max-w-5xl lg:grid-cols-1 lg:text-left">
-			<h2 className="text-xl font-bold mb-4">Generated Components</h2>
+		<div className="grid text-center lg:mb-0 lg:w-full lg:grid-cols-1 lg:text-left">
+			<h2 className="mb-4 font-bold text-xl">Generated Components</h2>
 			{components.length === 0 ? (
 				<p>No components generated yet.</p>
 			) : (
-				<div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+				<div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 					{components.map(({ id, name, code, createdAt }) => (
 						<Card key={id}>
 							<CardHeader className="gap-6">
 								<div className="flex flex-col gap-2">
 									<CardTitle>{name}</CardTitle>
 									<CardDescription>
-										Created: {new Date(createdAt).toLocaleDateString()}{" "}
+										Created: {new Date(createdAt).toLocaleDateString()}{' '}
 										{new Date(createdAt).toLocaleTimeString()}
 									</CardDescription>
 								</div>
@@ -41,7 +41,7 @@ export async function GeneratedComponents() {
 								<ComponentPreview
 									code={code}
 									name={name}
-									className="!max-w-full"
+									className="!max-w-full sm:min-h-[300px]"
 									previewProps={{
 										showOpenInCodeSandbox: false,
 										showRefreshButton: false,
@@ -53,5 +53,5 @@ export async function GeneratedComponents() {
 				</div>
 			)}
 		</div>
-	);
+	)
 }

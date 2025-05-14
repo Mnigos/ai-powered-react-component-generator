@@ -1,48 +1,70 @@
-import { ComponentPreview } from "@/components/component-preview";
-import { prisma } from "@/prisma";
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
-import { notFound } from "next/navigation";
+import { ComponentEditorChat } from '@/components/component-editor-chat'
+import { GeneratedComponentPreview } from '@/components/generated-component-preview'
+import { GeneratedComponents } from '@/components/generated-components'
+import { prisma } from '@/prisma'
+import { GeneratedComponentProvider } from '@/providers/generated-component.provider'
+import { ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
 
-type ComponentDetailsPageProps = Readonly<{
-	params: Promise<{
-		id: string;
-	}>;
-}>;
+interface ComponentDetailsPageProps {
+	params: Promise<{ id: string }>
+}
 
-export default async function ComponentDetailsPage({
+export default async function ComponentDetailsPageServerWrapper({
 	params,
-}: ComponentDetailsPageProps) {
-	const { id } = await params;
+}: Readonly<ComponentDetailsPageProps>) {
+	const { id } = await params
 
 	const foundComponent = await prisma.component.findUnique({
 		where: {
 			id,
 		},
-	});
+		include: {
+			messages: {
+				orderBy: {
+					createdAt: 'asc',
+				},
+			},
+		},
+	})
 
-	if (!foundComponent) notFound();
-
-	const { name, code } = foundComponent;
+	if (!foundComponent) notFound()
 
 	return (
-		<main className="flex min-h-screen h-screen flex-col items-center p-4 sm:p-8 md:p-12 lg:p-24">
-			<div className="w-full max-w-screen-xl">
-				<Link
-					href="/"
-					className="inline-flex items-center mb-6 text-sm font-medium text-blue-500 hover:text-blue-600"
-				>
-					<ArrowLeft /> Back to Generator
-				</Link>
-				<h1 className="text-2xl font-bold mb-8">Component - {name}</h1>
-			</div>
+		<main className="mx-auto flex min-h-screen max-w-screen-2xl flex-col gap-12 p-4 sm:p-8 lg:gap-16">
+			<section className="flex flex-col gap-6">
+				<header className="w-full max-w-screen-2xl">
+					<Link
+						href="/"
+						className="inline-flex items-center font-medium text-blue-500 text-sm hover:text-blue-600"
+					>
+						<ArrowLeft className="mr-1 h-4 w-4" /> Back to Generator
+					</Link>
 
-			<ComponentPreview
-				code={code}
-				name={name}
-				withEditor
-				className="flex-1 w-full h-[80%]"
-			/>
+					<h1 className="font-bold text-2xl">
+						Component - {foundComponent.name}
+					</h1>
+				</header>
+
+				<GeneratedComponentProvider
+					initialState={{
+						componentId: id,
+						...foundComponent,
+					}}
+				>
+					<div className="flex h-[80vh] flex-1 flex-col gap-6 overflow-hidden md:gap-8 lg:flex-row">
+						<div className="h-[500px] w-full md:overflow-auto">
+							<GeneratedComponentPreview />
+						</div>
+						<div className="w-full min-w-[350px] overflow-auto lg:max-w-[400px]">
+							<ComponentEditorChat />
+						</div>
+					</div>
+				</GeneratedComponentProvider>
+			</section>
+
+			<GeneratedComponents />
 		</main>
-	);
+	)
 }

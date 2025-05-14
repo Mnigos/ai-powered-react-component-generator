@@ -125,12 +125,10 @@
 .sp-container,
 .sp-stack,
 .sp-wrapper,
-.sp-preview-container {
+.sp-preview-container,
+.sp-layout {
 	min-height: 100% !important;
 	height: 100% !important;
-}
-
-.sp-layout {
 	min-width: 100% !important;
-	height: 100% !important;
+	width: 100% !important;
 }
