@@ -4,7 +4,9 @@ import { generateComponent } from '@/app/actions'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { LoaderCircle } from 'lucide-react'
 import { useState, useTransition } from 'react'
+import { WordRotate } from './magicui/word-rotate'
 
 export function ComponentGenerator() {
 	const [description, setDescription] = useState('')
@@ -33,7 +35,23 @@ export function ComponentGenerator() {
 					}}
 				/>
 				<Button onClick={handleGenerateClick} disabled={isLoading}>
-					{isLoading ? 'Generating...' : 'Generate Component'}
+					{isLoading ? (
+						<>
+							<LoaderCircle className="animate-spin" />
+							<WordRotate
+								className="w-[150px]"
+								words={[
+									'Generating...',
+									'Sit tight...',
+									'This might take a while...',
+									'Hold on...',
+									'Just a little longer...',
+								]}
+							/>
+						</>
+					) : (
+						'Generate Component'
+					)}
 				</Button>
 			</div>
 		</div>

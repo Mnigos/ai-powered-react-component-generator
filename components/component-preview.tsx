@@ -11,6 +11,7 @@ import {
 	SandpackProvider,
 } from '@codesandbox/sandpack-react'
 import { sandpackDark } from '@codesandbox/sandpack-themes'
+import { Check, ClipboardCopy } from 'lucide-react'
 import { useState } from 'react'
 
 export interface ComponentPreviewProps {
@@ -74,8 +75,23 @@ export function ComponentPreview({
 						{...previewProps}
 						actionsChildren={
 							<div className="flex items-center space-x-2">
-								<Button onClick={handleCopyClick} size="sm" disabled={!code}>
-									{copied ? 'Copied!' : 'Copy Code'}
+								<Button
+									onClick={handleCopyClick}
+									size="sm"
+									disabled={!code}
+									className="h-[28px] bg-card text-card-foreground hover:bg-card/90"
+								>
+									{!copied ? (
+										<>
+											<ClipboardCopy className="size-4" />
+											copy
+										</>
+									) : (
+										<>
+											<Check className="size-4" />
+											copied
+										</>
+									)}
 								</Button>
 							</div>
 						}

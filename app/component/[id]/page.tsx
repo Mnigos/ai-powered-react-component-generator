@@ -53,8 +53,8 @@ export default async function ComponentDetailsPageServerWrapper({
 						...foundComponent,
 					}}
 				>
-					<div className="flex h-[80vh] flex-1 flex-col gap-6 overflow-hidden md:gap-8 lg:flex-row">
-						<div className="h-[500px] w-full md:overflow-auto">
+					<div className="flex h-[90%] flex-1 flex-col gap-6 overflow-hidden md:gap-8 lg:flex-row">
+						<div className="h-[500px] w-full md:overflow-auto lg:h-[700px]">
 							<GeneratedComponentPreview />
 						</div>
 						<div className="w-full min-w-[350px] overflow-auto lg:max-w-[400px]">

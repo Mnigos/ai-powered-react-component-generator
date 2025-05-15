@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AI-Powered React Component Generator
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+```
+
+Build docker container with postgres database
+
+```bash
+pnpm run docker:postgres
+```
+
+Run prisma migrations
+
+```bash
+pnpm run prisma:migrate:deploy
+```
+
+Run developer server
+
+```bash
+pnpm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## About the app
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### JS Framework
 
-## Learn More
+I Decided to use Nextjs instead of Remix, because I know this technology better and it was easier and faster for me to create this app with Nextjs.
 
-To learn more about Next.js, take a look at the following resources:
+### AI Model
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- I decided to use Claude 3.7 Sonnet over Gemini, because I have more experience with it and it's more reliable for me. With Gemini I had some cases where I asked for something and for some reason Gemini skipped it or implemented other things, but forgot about something.
+- About the prompts I just described what should be done and what shouldn't and it works fine, but in the future I would play with it a little bit more.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Solution for components dynamic preview
 
-## Deploy on Vercel
+I decided to go with already existing solution which is Codesandbox's [Sandpack](https://github.com/codesandbox/sandpack). It allows user to edit the code directly in the preview.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Difficulties
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The main issue I had was styling sandpack preview, so maybe in the future I would explore different solutions.
+
+### Ideas for future development
+
+1. Authentication so user will be able to see components that he generated and not only all the generated components
+2. Streaming AI responses so user don't have to wait so long seeing only loading screen.
+3. Edit the AI response so it includes also a message for the user and not only the code of the generated component.
+4. Possibility to fork existing component and adjust it - related to point one.
+5. Possibility to use external libraries in generated component.
+6. Maybe use ShadcnCLI to install generated components.
+7. Improve UI and UX
+8. Implement GitHub integration to create PRs with generated components

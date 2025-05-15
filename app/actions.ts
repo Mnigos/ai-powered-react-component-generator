@@ -8,6 +8,8 @@ import { redirect } from 'next/navigation'
 import { z } from 'zod'
 
 const anthropic = createAnthropic()
+const model = anthropic('claude-3-7-sonnet-20250219')
+const maxTokens = 64000
 
 const componentSchema = z.object({
 	name: z
@@ -24,8 +26,9 @@ export async function generateComponent(description: string) {
 	}
 
 	const { object } = await generateObject({
-		model: anthropic('claude-3-7-sonnet-20250219'),
+		model,
 		schema: componentSchema,
+		maxTokens,
 		prompt: `Generate a React functional component based on the following description and extract a suitable component name. Provide the component name and code as a JSON object with "name" and "code" fields. The component should be ready to be rendered and include default values for props like children if applicable, also should be responsive and look good on all screen sizes. Do not use images when generating the component try to use svg. Never use external libraries. The code should be ready to use. Do not submit unfinished code or code with invalid syntax. Use tailwindcss classes for all styling.\n\nDescription: ${description}`,
 	})
 
@@ -50,21 +53,16 @@ export async function adjustComponentCode(
 	currentCode: string,
 	prompt: string,
 ) {
-	if (!prompt) {
-		return { error: 'Prompt is required' }
-	}
+	if (!prompt) return { error: 'Prompt is required' }
 
-	if (!currentCode) {
-		return { error: 'Current code is required' }
-	}
+	if (!currentCode) return { error: 'Current code is required' }
 
-	if (!componentId) {
-		return { error: 'Component ID is required' }
-	}
+	if (!componentId) return { error: 'Component ID is required' }
 
 	const result = await generateObject({
-		model: anthropic('claude-3-7-sonnet-20250219'), // Consider using a model better suited for code editing if available
+		model,
 		schema: componentSchema,
+		maxTokens,
 		prompt: `Adjust the following React component code based on the prompt. Provide only the adjusted component code, no explanations or markdown formatting. Ensure the component remains functional and adheres to best practices. Use tailwindcss classes for all styling. Do not use images when generating the component try to use svg. Never use external libraries.
 
 Existing Code:
@@ -74,7 +72,6 @@ User Prompt: ${prompt}`,
 	})
 
 	const adjustedCode = result.object.code.replace(
-		// eslint-disable-next-line prefer-regex-literals
 		/```typescript\n|```javascript\n|```tsx\n|```jsx\n|```\n|```$/g,
 		'',
 	)
@@ -94,8 +91,6 @@ User Prompt: ${prompt}`,
 	})
 
 	revalidateTag('components')
-	// We might need a more specific tag for revalidating a single component page if performance becomes an issue
-	// For now, revalidating all components or relying on client-side update of the preview should be sufficient.
 
 	return { code: adjustedCode }
 }

@@ -1,5 +1,5 @@
-import { prisma } from "@/prisma";
-import { unstable_cache } from "next/cache";
+import { prisma } from '@/prisma'
+import { unstable_cache } from 'next/cache'
 
 export const getLatestComponents = unstable_cache(
 	async () => {
@@ -11,12 +11,24 @@ export const getLatestComponents = unstable_cache(
 				createdAt: true,
 			},
 			orderBy: {
-				createdAt: "desc",
+				createdAt: 'desc',
 			},
 			take: 20,
-		});
-		return components;
+		})
+		return components
 	},
-	["latest_components"], // Key for the cache
-	{ tags: ["components"] }, // Tag for revalidation
-);
+	['latest_components'],
+	{ tags: ['components'] },
+)
+
+export const getComponentById = unstable_cache(
+	async (id: string) => {
+		const component = await prisma.component.findUnique({
+			where: { id },
+		})
+
+		return component
+	},
+	['component_by_id'],
+	{ tags: ['components'] },
+)

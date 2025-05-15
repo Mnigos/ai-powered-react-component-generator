@@ -2,7 +2,9 @@
 
 import { adjustComponentCode } from '@/app/actions'
 import { useGeneratedComponentStore } from '@/hooks/use-generated-component.store'
+import { LoaderCircle } from 'lucide-react'
 import { type FormEvent, useState, useTransition } from 'react'
+import { WordRotate } from './magicui/word-rotate'
 
 export function ComponentEditorChat() {
 	const componentId = useGeneratedComponentStore(state => state.componentId)
@@ -79,7 +81,23 @@ export function ComponentEditorChat() {
 					disabled={isPending || !prompt.trim()}
 					className="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-md bg-primary px-4 py-2 font-medium text-primary-foreground text-sm shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
 				>
-					{isPending ? 'Adjusting...' : 'Submit Adjustment'}
+					{isPending ? (
+						<>
+							<LoaderCircle className="animate-spin" />
+							<WordRotate
+								className="w-[180px]"
+								words={[
+									'Adjusting...',
+									'Sit tight...',
+									'This might take a while...',
+									'Hold on...',
+									'Just a little longer...',
+								]}
+							/>
+						</>
+					) : (
+						'Submit Adjustment'
+					)}
 				</button>
 			</form>
 		</div>
